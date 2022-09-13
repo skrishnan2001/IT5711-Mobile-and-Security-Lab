@@ -1,5 +1,6 @@
 package Encryption_Algorithms;
 //Sample input: 
+
 //text -> helloworld
 //key -> cbde
 
@@ -84,6 +85,14 @@ public class HillCipher {
         key[1][0] *= -1;
     }
 
+    static int findMultiplicativeInverse(int n) {
+        for (int i = 1; i <= 26; i++) {
+            if ((n * i) % 26 == 1)
+                return i;
+        }
+        return 26 / n;
+    }
+
     static String decrypt(String encryptedText, String key) {
         int[][][] cipherMat = constructTextMatrix(encryptedText);
         int n = encryptedText.length() / 2;
@@ -91,12 +100,13 @@ public class HillCipher {
         int[][] keyMat = constructKeyMatrix(key);
         int D = findDeterminant(keyMat);
         findAdjointMatrix(keyMat);
-
+        int detInverse = findMultiplicativeInverse(D);
         // Modifying keyMat to make it's inverse
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
-                int curr = (keyMat[i][j] * (26 - D % 26)) % 26;
-                keyMat[i][j] = curr > 0 ? curr : 26 + curr;
+                keyMat[i][j] = (keyMat[i][j] * detInverse) % 26;
+                if (keyMat[i][j] < 0)
+                    keyMat[i][j] += 26;
             }
         }
 
