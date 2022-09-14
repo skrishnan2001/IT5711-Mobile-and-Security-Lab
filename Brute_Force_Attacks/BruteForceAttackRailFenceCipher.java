@@ -1,9 +1,11 @@
-package Encryption_Algorithms;
-
+package Brute_Force_Attacks;
 import java.util.*;
 
-public class RailFenceCipher {
+public class BruteForceAttackRailFenceCipher {
     static Scanner in = new Scanner(System.in);
+    static String password = "Krishnan";
+    static int secretKey = 3;
+    static int attempts = 0;
 
     static String encrypt(String message, int key) {
         int n = message.length();
@@ -110,14 +112,23 @@ public class RailFenceCipher {
     }
 
     public static void main(String args[]) {
-        System.out.print("Enter the message: ");
-        String message = in.next();
-        System.out.print("Enter the key: ");
-        int key = in.nextInt();
-        String encryptedText = encrypt(message, key);
-        System.out.println("Encrypted Text: " + encryptedText);
+        System.out.print("Enter the username: ");
+        String username = in.next();
+        System.out.print("Enter the encrypted password: ");
+        String cipher = in.next();
 
-        String decryptText = decrypt(encryptedText, key);
-        System.out.println("Decrypted Text: " + decryptText);
+        int n = cipher.length();
+        for (int key = 2; key <= n; key++) {
+            String decryptText = decrypt(cipher, key);
+            attempts++;
+            System.out.println(decryptText);
+            if (decryptText.equals(password)) {
+                System.out.println("You have successfully logged in!!");
+                System.out.println("Number of attempts: " + attempts);
+                System.out.println("Depth = " + key);
+                return;
+            }
+        }
+        System.out.println("The cipher doesn't use Rail Fence Cipher!!");
     }
 }
